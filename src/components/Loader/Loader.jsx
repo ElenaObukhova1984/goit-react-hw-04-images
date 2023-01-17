@@ -5,9 +5,9 @@ const Loader = () => {
   return (
     <Container>
       <ThreeCircles
-        height="100"
-        width="100"
-        color="#4fa94d"
+        height="80"
+        width="80"
+        color="#4c13cf"
         wrapperStyle={{}}
         wrapperClass=""
         visible={true}
@@ -15,7 +15,7 @@ const Loader = () => {
         outerCircleColor=""
         innerCircleColor=""
         middleCircleColor=""
-/>
+      />
     </Container>
   );
 };

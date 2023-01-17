@@ -18,7 +18,6 @@ class ImageGalleryItem extends Component {
     render() {
         return (
         <>
-            
                 <ImageItem>
                     <ImageImg
                         onClick={this.toggleModal}
@@ -40,18 +39,3 @@ class ImageGalleryItem extends Component {
 
 export default ImageGalleryItem;
 
-// const ImageGalleryItem = ({ images}) => {
-//     return (
-//     <>
-//     {images.map(({ id, webformatURL, largeImageURL, tags }) => (
-//         <ImageItem key={id}>
-//             <ImageImg
-//                 src={webformatURL}
-//                 alt={tags}
-//                 data-src={largeImageURL}
-//                 />
-//         </ImageItem>))}   
-        
-//     </>
-//     )
-// };

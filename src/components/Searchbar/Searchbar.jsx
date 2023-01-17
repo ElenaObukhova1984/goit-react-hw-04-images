@@ -27,11 +27,7 @@ export default class Searchbar extends Component {
             query: ''
     });
     }
-    
-    
-
-
-    
+        
     render() {
    
     return (
