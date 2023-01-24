@@ -1,45 +1,75 @@
-import React, { Component } from "react";
+import  { useEffect } from "react";
 import { createPortal } from 'react-dom';
 import { Overlay,ModalContainer,ModalImage } from "./Modal.styled";
 
 const modalRoot = document.querySelector('#modal-root');
 
-export default class Modal extends Component {
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyDown);
-  }
+export default function Modal ({src, onClose}) {
+  useEffect(() => {
+    const handleKeyDown = e => {
+      if (e.code === 'Escape') {
+        onClose();
+      }
+    };
+  
+    document.addEventListener('keydown', handleKeyDown);
+    return () => { document.removeEventListener('keydown', handleKeyDown); }
+  }, [onClose]);
+ 
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyDown);
-  }
+  
 
-  handleKeyDown = e => {
-    if (e.code === 'Escape') {
-      this.props.onClose();
-    }
-  };
-
-  handleBackdropClick = e => {
+  const handleBackdropClick = e => {
     if (e.currentTarget === e.target) {
-      this.props.onClose();
+      onClose();
     }
   };
 
-  render() {
+  
     return createPortal(
-      <Overlay onClick={this.handleBackdropClick}>
+      <Overlay onClick={handleBackdropClick}>
         <ModalContainer>
-          <ModalImage src={this.props.src} alt="image" />
+          <ModalImage src={src} alt="image" />
         </ModalContainer>
       </Overlay>,
       modalRoot
     );
   }
-}
 
 
 
+// export default class Modal extends Component {
+//   componentDidMount() {
+//     window.addEventListener('keydown', this.handleKeyDown);
+//   }
 
+//   componentWillUnmount() {
+//     window.removeEventListener('keydown', this.handleKeyDown);
+//   }
+
+//   handleKeyDown = e => {
+//     if (e.code === 'Escape') {
+//       this.props.onClose();
+//     }
+//   };
+
+//   handleBackdropClick = e => {
+//     if (e.currentTarget === e.target) {
+//       this.props.onClose();
+//     }
+//   };
+
+//   render() {
+//     return createPortal(
+//       <Overlay onClick={this.handleBackdropClick}>
+//         <ModalContainer>
+//           <ModalImage src={this.props.src} alt="image" />
+//         </ModalContainer>
+//       </Overlay>,
+//       modalRoot
+//     );
+//   }
+// }
 
 
 
