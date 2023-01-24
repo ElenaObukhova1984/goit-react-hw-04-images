@@ -11,7 +11,7 @@ import Loader from "./Loader";
 export function App () {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
-  const [error, setError] = useState(null);
+  
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [total_results, setTotal_results] = useState(null);
@@ -35,7 +35,7 @@ export function App () {
       }
         
       } catch (error) {
-        setError(error.message);
+        error(error.message);
         
       }
     }
