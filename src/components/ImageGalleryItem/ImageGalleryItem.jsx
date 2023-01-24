@@ -1,41 +1,66 @@
-import React, { Component } from "react";
+import  { useState } from "react";
 import { ImageItem, ImageImg } from './ImageGalleryItem.styled';
 import Modal from "components/Modal";
 
 
-class ImageGalleryItem extends Component {
-    state = ({
-        showModal:false,
-    })
+const ImageGalleryItem =({src,modalSrc}) =>{
+    const [showModal, setShowModal] = useState(false);
 
-    toggleModal = () => {
-    this.setState(({ showModal }) => ({
-    showModal: !showModal,
-    }));
+    const toggleModal = () => {
+    setShowModal(prevState =>prevState);
     };
-
     
-    render() {
-        return (
+    return (
         <>
                 <ImageItem>
                     <ImageImg
-                        onClick={this.toggleModal}
-                        src={this.props.src}
+                        onClick={toggleModal}
+                        src={src}
                         alt="image"
-                        
-                    />
+                        />
                 </ImageItem>
-                {this.state.showModal && (
-                <Modal onClose={this.toggleModal} src={this.props.modalSrc} />
-)}
-
-        
+                {showModal && (
+                <Modal onClose={toggleModal} src={modalSrc} />
+                )}
         </>
         )
     };
-}
-   
 
+   
 export default ImageGalleryItem;
 
+// class ImageGalleryItem extends Component {
+//     state = ({
+//         showModal:false,
+//     })
+
+//     toggleModal = () => {
+//     this.setState(({ showModal }) => ({
+//     showModal: !showModal,
+//     }));
+//     };
+
+    
+//     render() {
+//         return (
+//         <>
+//                 <ImageItem>
+//                     <ImageImg
+//                         onClick={this.toggleModal}
+//                         src={this.props.src}
+//                         alt="image"
+                        
+//                     />
+//                 </ImageItem>
+//                 {this.state.showModal && (
+//                 <Modal onClose={this.toggleModal} src={this.props.modalSrc} />
+// )}
+
+        
+//         </>
+//         )
+//     };
+// }
+   
+
+// export default ImageGalleryItem;
