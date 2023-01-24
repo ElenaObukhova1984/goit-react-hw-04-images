@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { useState, useEffect } from "react";
 import * as ImageService from 'service/api';
 import toast, { Toaster }  from 'react-hot-toast';
 import { GlobalStyle } from "./GlobalStyle";
@@ -8,81 +8,64 @@ import Button from "./Button";
 import Loader from "./Loader";
 
 
-export class App extends Component {
-  state = {
-    query: '',
-    page: 1,
-    error: null,
-    images: [],
-    isLoading:false,
-    per_page: 12,
-    total_results: null,
-      }
-  
-  
+export function App () {
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const [error, setError] = useState(null);
+  const [images, setImages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [total_results, setTotal_results] = useState(null);
 
-  componentDidUpdate(prevProps, prevState) {
-    const { query, page } = this.state;
-    if (prevState.query !== query || prevState.page !== page) {this.setState({
-     isLoading: true,
-      });
-      this.getImages();
-    };
+  useEffect(() => {
+    if (!query) {
+      return;
+    }
+    setIsLoading(true);
 
-  }
-
-  getImages = async () => {
-    const { query, page, images } = this.state;
-    try {
-      const fetchImg = await ImageService.fetchImages(query, page);
-
-      
-      this.setState({
-        images: [...images, ...fetchImg.hits],
-        total_results: fetchImg.totalHits,
-        isLoading: false,
-        
-      });
-
-      if (fetchImg.totalHits === 0) {
+    async function getImages (query, page) {
+      try {
+        const { hits, totalHits } = await ImageService.fetchImages(query, page);
+        setImages(prevState => [...prevState, ...hits]);
+        setTotal_results(totalHits);
+        setIsLoading(false);
+        if (totalHits === 0) {
         toast.error(`Nothing found! Please enter a search query again!!!`, {
             theme: "colored"
           })
       }
-   
-    } catch (error) {
-      this.setState({
-        error: error.message,
-      })
-    
+        
+      } catch (error) {
+        setError(error.message);
+        
+      }
     }
+    getImages(query, page);
+  }
+    , [query, page])
+  
+
+  
+  
+  const handleFormSubmit = (query) => {
+    setQuery(query);
+    setPage(1);
+    setImages([]);
   }
   
-  handleFormSubmit = (query) => {
-    this.setState({
-      query,
-      images: [],
-      page: 1 
-    })
-  }
+  const onLoadMore = () => {
+    setPage(prevState=>prevState+1)
+      }
+
   
-  onLoadMore = () => {
-
-    this.setState(prevState => ({
-      page:prevState.page+1
-    }))
-  }
-
-  render() {
-    const { page, images, per_page, total_results,isLoading } = this.state;
-    const totalPage = Math.ceil(total_results /per_page);
+    
+  const totalPage = Math.ceil(total_results/12);
     return (
       <>
-      <Searchbar onSubmit={this.handleFormSubmit} />
+      <Searchbar onSubmit={handleFormSubmit} />
         <ImageGallery
           images={images}>
         </ImageGallery>
-      {images.length>0 && page<totalPage&&(<Button onClick={this.onLoadMore}/> )}
+      {images.length>0 && page<totalPage&&(<Button onClick={onLoadMore}/> )}
       {(isLoading===true) && <Loader />}
       
       <Toaster />
@@ -90,4 +73,5 @@ export class App extends Component {
       </>
     )
   }
-}
+
+
